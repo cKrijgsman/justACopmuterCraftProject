@@ -132,14 +132,14 @@ function fillChart(name, cData)
     for j = cData["ymin"], cData["ymax"] do
         mon.setCursorPos(cData["xmin"], j)
         if j == yspot then
-            for k = 0, cData["xmax"] - cData["xmin"] - string.len(text) + 1 do
-                if barWidth + cData["xmax"] >= cData["xmax"] + (cData["xmax"] - k) then
+            for i = cData["xmin"], cData["xmax"] do
+                if barWidth + cData["xmax"] >= cData["xmax"] + (cData["xmax"] - i) then
                     mon.setBackgroundColor(cData["color"])
                 else
                     mon.setBackgroundColor(emptyColor)
                 end
-                if k == xspot then
-                    mon.write(text)
+                if i >= xspot and i <= xspot + string.len(text) then
+                    mon.write(string.sub(text, i - xspot, 1))
                 else
                     mon.write(" ")
                 end

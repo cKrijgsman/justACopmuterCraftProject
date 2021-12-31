@@ -68,6 +68,8 @@ local function eventLoop()
     local event, side, x, y, message, senderDistance
     event, side, x, y, message, senderDistance = os.pullEvent("")
 
+    print(event)
+
     if event == "monitor_touch" then
         gui.checkxy(x, y)
     end
@@ -75,6 +77,8 @@ local function eventLoop()
     if event == "modem_message" then
         updateData(message)
     end
+
+    os.sleep(0.1)
 end
 
 -- Set the heading
