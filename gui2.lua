@@ -19,7 +19,7 @@ end
 function addButton(name, text, func, xmin, xmax, ymin, ymax, color, activeColor, textColor)
     color = color or colors.red
     activeColor = activeColor or colors.lime
-    textColor = textColor or color.white
+    textColor = textColor or colors.white
     button[name] = {}
     button[name]["text"] = text
     button[name]["func"] = func
@@ -33,14 +33,16 @@ function addButton(name, text, func, xmin, xmax, ymin, ymax, color, activeColor,
     button[name]["textColor"] = textColor
 end
 
-function addChart(name, xmin, xmax, ymin, ymax, value, color, label)
+function addChart(name, func, xmin, xmax, ymin, ymax, value, color, offColor, label)
     charts[name] = {}
+    charts[name]["func"] = func
     charts[name]["xmin"] = xmin
     charts[name]["xmax"] = xmax
     charts[name]["ymin"] = ymin
     charts[name]["ymax"] = ymax
     charts[name]["value"] = value
     charts[name]["color"] = color
+    charts[name]["offColor"] = offColor
     charts[name]["label"] = label
     -- where the values are percentages
 end
@@ -55,6 +57,7 @@ function updateButton(name, text, color)
     color = color or button[name]["color"]
     button[name]["text"] = text
     button[name]["color"] = color
+    screenButton()
 end
 
 function screenButton()
@@ -172,6 +175,15 @@ function checkxy(x, y)
         if y >= data["ymin"] and y <= data["ymax"] then
             if x >= data["xmin"] and x <= data["xmax"] then
                 data["func"]()
+                flash(name)
+                return true
+            end
+        end
+    end
+    for name, data in pairs(charts) do
+        if y >= data["ymin"] and y <= data["ymax"] then
+            if x >= data["xmin"] and x <= data["xmax"] then
+                data["func"](name,x,y)
                 flash(name)
                 return true
             end
