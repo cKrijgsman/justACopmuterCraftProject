@@ -19,6 +19,7 @@ end
 function addButton(name, text, func, xmin, xmax, ymin, ymax, color, activeColor, textColor)
     color = color or colors.red
     activeColor = activeColor or colors.lime
+    textColor = textColor or color.white
     button[name] = {}
     button[name]["text"] = text
     button[name]["func"] = func
@@ -101,9 +102,9 @@ function fillButton(text, color, bData)
 end
 
 function fillChart(name, cData)
-    local h = cData["ymax"] - cData["ymin"]
-    local percentPerStep = math.floor(100 / h)
-    local barHeight = math.floor(cData["value"] / percentPerStep)
+    local w = cData["xmax"] - cData["xmin"]
+    local percentPerStep = math.floor(100 / w)
+    local barWidth = math.floor(cData["value"] / percentPerStep)
 
     local xspot = math.floor((cData["xmax"] - cData["xmin"]) / 2) - 1
     local yspot = math.floor((cData["ymin"] + cData["ymax"]) / 2)
@@ -129,7 +130,7 @@ function fillChart(name, cData)
         mon.setCursorPos(cData["xmin"], j)
         if j == yspot then
             for k = 0, cData["xmax"] - cData["xmin"] - string.len(text) + 1 do
-                if barHeight + cData["ymax"] >= cData["ymax"] + (cData["ymax"] - j) then
+                if barWidth + cData["xmax"] >= cData["xmax"] + (cData["xmax"] - k) then
                     mon.setBackgroundColor(cData["color"])
                 else
                     mon.setBackgroundColor(emptyColor)
@@ -142,7 +143,7 @@ function fillChart(name, cData)
             end
         else
             for i = cData["xmin"], cData["xmax"] do
-                if barHeight + cData["ymax"] >= cData["ymax"] + (cData["ymax"] - j) then
+                if barWidth + cData["xmax"] >= cData["xmax"] + (cData["xmax"] - i) then
                     mon.setBackgroundColor(cData["color"])
                 else
                     mon.setBackgroundColor(emptyColor)

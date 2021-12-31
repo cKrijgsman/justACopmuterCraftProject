@@ -46,39 +46,35 @@ end
 
 local function updateData(data)
     for k, v in pairs(data) do
-        print(i .. ":", v)
+        print(k .. ":", v)
     end
 end
 
-local function setControllRod(power)
+local function setControllRod(name,x,y)
+    print("clicked on " .. name .. "at " .. x .."," .. y)
 
+    local value = x - gui.charts[name]["xmin"]
+    local multiplier = (gui.charts[name]["xmax"] - gui.charts[name]["xmin"])/100
+    value = x * multiplier
+
+    gui.updateChart(name, value, gui.charts[name]["color"])
 end
 
 local function none()
 
 end
 
-local function getData()
-    local event, modemSide, senderChannel, replyChannel, message, senderDistance = os.pullEvent("")
-
-    if event == "modem_message" then
-        updateData(message)
-    end
-
-end
-
-local function handleTouch()
-    local event, side, x, y
-    event, side, x, y = os.pullEvent("")
+local function eventLoop()
+    local event, side, x, y, message, senderDistance
+    event, side, x, y, message, senderDistance = os.pullEvent("")
 
     if event == "monitor_touch" then
         gui.checkxy(x, y)
     end
-end
 
-local function eventLoop()
-    handleTouch()
-    getData()
+    if event == "modem_message" then
+        updateData(message)
+    end
 end
 
 -- Set the heading
@@ -86,7 +82,7 @@ gui.label(10, 4, "Reactor Control Panel", 1)
 
 -- Set data lables
 gui.label(4, 10, "Power Generation:", 0, colors.lightGray)
-gui.label(4, 12, "Power Draw:", 0, colors.lightGray)
+gui.label(4, 12, "Power Change:", 0, colors.lightGray)
 gui.label(4, 14, "Fuel Consumption:", 0, colors.lightGray)
 gui.label(4, 16, "Fuel Percentage:", 0, colors.lightGray)
 gui.label(4, 18, "Casting Temperature:", 0, colors.lightGray)
@@ -103,7 +99,11 @@ gui.addButton("fuel_con", "0 mB/t", none, 22, 29, 14, 15, colors.black, colors.b
 gui.addButton("fuel_temp", "20 °C", none, 22, 29, 16, 17, colors.black, colors.black, colors.green)
 gui.addButton("cast_temp", "20 °C", none, 25, 32, 18, 19, colors.black, colors.black, colors.green)
 
+-- Slider
+gui.addChart("slider", setControllRod, 36, 78, 22, 24, 50, colors.lime, colors.white,"Control Rod Insertion")
+
+gui.screenButton()
+
 while true do
-    gui.screenButton()
     eventLoop()
 end
