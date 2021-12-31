@@ -94,7 +94,7 @@ gui.addButton("eff", "EFF", efficiency, 24, 32, 22, 24, colors.blue, colors.ligh
 
 -- place data boxes
 gui.addButton("power_gen", "0 kRF/t", none, 22, 29, 10, 11, colors.black, colors.black, colors.red)
-gui.addButton("power_draw", "69.0 kRF/t", none, 16, 23, 12, 13, colors.black, colors.black, colors.yellow)
+gui.addButton("power_draw", "69.0 kRF/t", none, 16, 28, 12, 13, colors.black, colors.black, colors.yellow)
 gui.addButton("fuel_con", "0 mB/t", none, 22, 29, 14, 15, colors.black, colors.black, colors.green)
 gui.addButton("fuel_temp", "20 °C", none, 22, 29, 16, 17, colors.black, colors.black, colors.green)
 gui.addButton("cast_temp", "20 °C", none, 25, 32, 18, 19, colors.black, colors.black, colors.green)
@@ -103,6 +103,7 @@ gui.addButton("cast_temp", "20 °C", none, 25, 32, 18, 19, colors.black, colors.
 gui.addChart("slider", setControllRod, 36, 78, 22, 24, 50, colors.lime, colors.white,"Control Rod Insertion")
 
 gui.screenButton()
+gui.screenChart()
 
 while true do
     eventLoop()
