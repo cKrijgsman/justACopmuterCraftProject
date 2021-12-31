@@ -53,10 +53,12 @@ function updateChart(name, value, color)
     screenChart()
 end
 
-function updateButton(name, text, color)
+function updateButton(name, text, color, textColor)
     color = color or button[name]["color"]
+    textColor = textColor or button[name]["textColor"]
     button[name]["text"] = text
     button[name]["color"] = color
+    button[name]["textColor"] = textColor
     screenButton()
 end
 
@@ -132,21 +134,22 @@ function fillChart(name, cData)
     for j = cData["ymin"], cData["ymax"] do
         mon.setCursorPos(cData["xmin"], j)
         if j == yspot then
-            for i = 0, cData["xmax"] - cData["xmin"] - string.len(text) + 1 do
-                if barWidth + cData["xmax"] >= cData["xmax"] + (cData["xmax"] - (cData["xmin"]+ i)) then
+            for i = cData["xmin"], cData["xmax"] do
+                local k = i - cData["xmin"]
+                if barWidth + cData["xmax"] < cData["xmax"] + (cData["xmax"] - i) then
                     mon.setBackgroundColor(cData["color"])
                 else
                     mon.setBackgroundColor(emptyColor)
                 end
-                if i >= xspot and i <= xspot + string.len(text) then
-                    mon.write(string.sub(text, i - xspot, 1))
+                if k >= xspot and k <= xspot + string.len(text) then
+                    mon.write(string.sub(text, k - xspot, 1))
                 else
                     mon.write(" ")
                 end
             end
         else
             for i = cData["xmin"], cData["xmax"] do
-                if barWidth + cData["xmax"] >= cData["xmax"] + (cData["xmax"] - i) then
+                if barWidth + cData["xmax"] < cData["xmax"] + (cData["xmax"] - i) then
                     mon.setBackgroundColor(cData["color"])
                 else
                     mon.setBackgroundColor(emptyColor)
