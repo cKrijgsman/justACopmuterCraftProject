@@ -16,6 +16,8 @@ local monit = peripheral.wrap("top")
 monit.setTextScale(1)
 monit.clear()
 
+local timerCode
+
 -- modem.open(12864)
 
 -- Functions
@@ -61,7 +63,7 @@ local function setControllRod(name, x, y)
 end
 
 local function none()
-
+    print("NONE!")
 end
 
 local function eventLoop()
@@ -110,18 +112,25 @@ gui.screenButton()
 gui.screenChart()
 
 while true do
-    print("Press E to do something.")
-
-    local event, key, x, y = os.pullEvent("") -- limit os.pullEvent to the 'key' event
-
-    if event == "monitor_touch" then
-        print("stuff!")
-    end
-
-    if event == "key" then
-        if key == keys.e then -- if the key pressed was 'e'
-            print("You pressed [E]. Exiting program...")
-            break
+    timerCode = os.startTimer(1)
+    local event, side, x, y, message
+    repeat
+        event, side, x, y = os.pullEvent()
+        print(event)
+        if event == "timer" then
+            print(timerCode .. ":" .. side)
+            if timerCode ~= side then
+                print("Wrong Code")
+            else
+                print("Right Code")
+            end
         end
+    until event ~= "timer" or timerCode == side
+    if event == "monitor_touch" then
+        print(x .. ":" .. y)
+        button.checkxy(x, y)
+    end
+    if event == "modem_message" then
+        updateData(message)
     end
 end
