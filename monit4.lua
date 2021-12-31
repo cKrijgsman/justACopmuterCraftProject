@@ -12,11 +12,11 @@
 os.loadAPI("bigfont")
 os.loadAPI("gui")
 local monit = peripheral.wrap("top")
-local modem = peripheral.wrap("bottom")
+-- local modem = peripheral.wrap("bottom")
 monit.setTextScale(1)
 monit.clear()
 
-modem.open(12864)
+-- modem.open(12864)
 
 -- Functions
 
@@ -50,11 +50,11 @@ local function updateData(data)
     end
 end
 
-local function setControllRod(name,x,y)
-    print("clicked on " .. name .. "at " .. x .."," .. y)
+local function setControllRod(name, x, y)
+    print("clicked on " .. name .. "at " .. x .. "," .. y)
 
     local value = x - gui.charts[name]["xmin"]
-    local multiplier = (gui.charts[name]["xmax"] - gui.charts[name]["xmin"])/100
+    local multiplier = (gui.charts[name]["xmax"] - gui.charts[name]["xmin"]) / 100
     value = x * multiplier
 
     gui.updateChart(name, value, gui.charts[name]["color"])
@@ -74,9 +74,9 @@ local function eventLoop()
         gui.checkxy(x, y)
     end
 
-    if event == "modem_message" then
-        updateData(message)
-    end
+    -- if event == "modem_message" then
+    --    updateData(message)
+    -- end
 
     os.sleep(0.1)
 end
@@ -104,11 +104,24 @@ gui.addButton("fuel_temp", "20 °C", none, 22, 29, 16, 17, colors.black, colors.
 gui.addButton("cast_temp", "20 °C", none, 25, 32, 18, 19, colors.black, colors.black, colors.green)
 
 -- Slider
-gui.addChart("slider", setControllRod, 36, 78, 22, 24, 50, colors.lime, colors.white,"Control Rod Insertion")
+gui.addChart("slider", setControllRod, 36, 78, 22, 24, 50, colors.lime, colors.white, "Control Rod Insertion")
 
 gui.screenButton()
 gui.screenChart()
 
 while true do
-    eventLoop()
+    print("Press E to do something.")
+
+    local event, key, x, y = os.pullEvent("") -- limit os.pullEvent to the 'key' event
+
+    if event == "monitor_touch" then
+        print("stuff!")
+    end
+
+    if event == "key" then
+        if key == keys.e then -- if the key pressed was 'e'
+            print("You pressed [E]. Exiting program...")
+            break
+        end
+    end
 end
